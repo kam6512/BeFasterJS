@@ -1,7 +1,3 @@
-
-
-#
-
 ## 1장. 로딩과 실행
 
 ### 1 - 1. 스크립트의 위치
@@ -41,4 +37,21 @@ document.getElementByTagName('head')[0].appendChild(script);
 
 __XHR 객체로 JS 코드를 내려 받아 페이지에 삽입__
 
-    - 
+    - 코드를 내려받아도 즉시 실행하지 않아도 된다
+    - 예외처리를 하지 않더라도 모든 최신 브라우저에서 지원한다
+    - JS 파일과 그 파일을 요청한 페이지가 같은 도메인에 있어야만 한다 == CDN 불가
+
+````javascript
+var xhr = new XMLHttpRequest();
+xhr.open('get', 'sample.js', true)
+xhr.onreadystatechange = function(){
+    if(xhr.readyState == 4){
+        if(xhr.status >= 200 && xhr.status < 300 || xhr.status == 304){ //파일이 유효한지 확인 (304 == 캐시된 응답)
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.text = xhr.responseText;
+            document.body.appendChild(script);
+        }
+    }
+}
+````
